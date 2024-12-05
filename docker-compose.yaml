@@ -1,0 +1,44 @@
+services:
+  books:
+    container_name: books
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    env_file:
+      - ./.env
+    command: npm run start:dev
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/usr/src
+      - /usr/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - default_network
+
+  postgres:
+    container_name: postgres-books
+    image: postgres:13.5
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./backup:/var/lib/postgresql/data
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    networks:
+      - default_network
+
+volumes:
+  postgres: {}
+
+networks:
+  default_network:
+    driver: bridge

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from './database/database.service';
+import { DatabaseBooksService } from 'libs/common/src/database-books/database-books.service';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: DatabaseBooksService) {}
 
   getHello(): string {
     return 'Hello World!';

@@ -1,25 +1,40 @@
 services:
-  postgres:
+  postgres_books:
     container_name: postgres-books
     image: postgres:13.5
     restart: always
     env_file:
       - .env
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_BOOKS_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_BOOKS_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_BOOKS_DB}
     volumes:
       - postgres:/var/lib/postgresql/data
-      - ./backup:/var/lib/postgresql/data
+      - ./backup/books:/var/lib/postgresql/data
     ports:
-      - '${POSTGRES_PORT}:5432'
-    networks:
-      - default_network
+      - '${POSTGRES_BOOKS_PORT}:5432'
+
+  postgres_flight:
+    container_name: postgres-flight
+    image: postgres:13.5
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_FLIGHT_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_FLIGHT_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_FLIGHT_DB}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./backup/flight:/var/lib/postgresql/data
+      - ./dump/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports:
+      - '${POSTGRES_FLIGHT_PORT}:5432'
 
 volumes:
   postgres: {}
 
 networks:
-  default_network:
+  books_network:
     driver: bridge

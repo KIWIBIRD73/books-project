@@ -1,0 +1,30 @@
+# Node
+node_modules
+npm-debug.log
+*.log
+dist
+backup
+dump
+
+# Version control
+.git
+.gitignore
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testing
+coverage
+*.test.js
+
+# OS files
+.DS_Store
+
+# Envs
+.env
+
+.dockerignore
+*.md 

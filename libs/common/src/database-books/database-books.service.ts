@@ -1,14 +1,14 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from 'prisma/generated/client';
+import { PrismaClient } from '@prisma/generated/client-books';
 import { faker } from '@faker-js/faker';
 
 @Injectable()
-export class DatabaseService extends PrismaClient implements OnModuleInit {
+export class DatabaseBooksService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger('DatabaseService');
   async onModuleInit() {
     await this.$connect();
 
-    if (parseInt(process.env.GENERATE_FAKE_DATA)) {
+    if (parseInt(process.env.GENERATE_BOOKS_FAKE_DATA)) {
       this.generateMockData();
     }
   }

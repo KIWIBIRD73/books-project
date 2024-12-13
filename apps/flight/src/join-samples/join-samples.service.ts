@@ -54,7 +54,6 @@ export class JoinSamplesService {
   }
 
   public task6(dto: PaginationDto) {
-    console.log('huh');
     return this.databaseService.$queryRaw`
       SELECT
         departure_airport.airport_name AS departureAirportName,

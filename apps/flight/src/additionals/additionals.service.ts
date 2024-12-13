@@ -88,15 +88,40 @@ export class AdditionalsService {
   }
 
   public async task8() {
-    const response = await this.databaseService.$queryRaw`
-      SELECT flights.flight_id, flights.flight_no, COUNT(ticket_flights.ticket_no) AS occupied_seats
-      FROM flights
-      LEFT JOIN ticket_flights ON flights.flight_id = ticket_flights.flight_id
-      GROUP BY flights.flight_id, flights.flight_no
-      ORDER BY occupied_seats DESC
-      LIMIT 1;
-    `;
+    // const response = await this.databaseService.$queryRaw`
+    //   -- SELECT flights.flight_id, flights.flight_no, COUNT(ticket_flights.ticket_no) AS occupied_seats
+    //   -- FROM flights
+    //   -- LEFT JOIN ticket_flights ON flights.flight_id = ticket_flights.flight_id
+    //   -- GROUP BY flights.flight_id, flights.flight_no
+    //   -- ORDER BY occupied_seats ASC
+    //   -- LIMIT 1;
 
+    //   SELECT flights.flight_id, flights.flight_no, COUNT(ticket_flights.ticket_no) AS tickerTickerNo
+    //   FROM flights
+    //   LEFT JOIN ticket_flights ON flights.flight_id = ticket_flights.flight_id
+    //   LEFT JOIN seats ON flights.aircraft_code = seats.aircraft_code
+    //   WHERE tickerTickerNo > 0
+    //   GROUP BY flights.flight_id
+    //   ORDER BY tickerTickerNo ASC
+    //   LIMIT 10;
+    // `;
+
+    const [flightCount, seatsCount] = await this.databaseService.$transaction([
+      this.databaseService.flights.count({
+        where: {
+          ticket_flights: {
+            some: {
+              amount: {
+                gt: 0,
+              },
+            },
+          },
+        },
+      }),
+      this.databaseService.seats.count({}),
+    ]);
+
+    return console.log((seatsCount / flightCount) * 100);
     response[0].occupied_seats = parseInt(response[0].occupied_seats);
     return response;
   }

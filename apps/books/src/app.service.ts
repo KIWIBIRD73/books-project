@@ -17,13 +17,13 @@ export class AppService {
     return this.databaseService.$queryRaw`
       SELECT "firstName", "lastName"
       FROM "Author"
-      WHERE "birthDate" < '1980-01-01' AND "firstName" LIKE 'S%';
+      WHERE "birthDate" < '1980-01-01' AND UPPER("firstName") LIKE 'G%';
     `;
   }
 
   /**
    * 2. Выведите название книги, имя и фамилию автора и название издательства для всех книг,
-   * изданных после 2010 года.  Результаты должны быть отсортированы по названию книги.
+   * изданных после 2010 года. Результаты должны быть отсортированы по названию книги.
    */
   public getTask2Data() {
     return this.databaseService.$queryRaw`
@@ -88,7 +88,7 @@ export class AppService {
       JOIN "Author" ON "Book"."authorId" = "Author"."id"
       JOIN "Publisher" ON "Book"."publisherId" = "Publisher"."id"
       WHERE 
-        "Loan"."issueDate" >= '2024-01-01' AND "Loan"."returnDate" < '2025-01-01'
+        "Loan"."issueDate" >= '2024-01-01' AND "Loan"."returnDate" < '2026-01-01'
       GROUP BY "Book"."id", "Author"."id", "Publisher"."id"
       HAVING COUNT("Loan"."id") > 0
       ORDER BY "loanCount" DESC;
